@@ -28,7 +28,7 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 // This would normally interact with a backend API
-// For demo purposes, using localStorage
+// For demo purposes, we're using localStorage
 const fakeUserApi = {
   login: async (email: string, password: string): Promise<User> => {
     // Simulate API call

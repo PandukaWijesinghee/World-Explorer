@@ -5,7 +5,10 @@ interface ResourceLoaderProps {
   children: React.ReactNode;
 }
 
-
+/**
+ * Component that handles loading of external resources with fallbacks
+ * This helps prevent ERR_BLOCKED_BY_CLIENT errors from breaking the application
+ */
 const ResourceLoader: React.FC<ResourceLoaderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
