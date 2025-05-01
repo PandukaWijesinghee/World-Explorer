@@ -40,7 +40,7 @@ This React application provides an interactive UI for browsing country data fetc
 Start the development server:
 npm start
 
-This will open the app at `http://localhost:3000`.
+This will open the app at `http://localhost:4000`.
 
 ## Building for Production
 
