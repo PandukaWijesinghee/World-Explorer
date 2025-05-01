@@ -159,10 +159,7 @@ const LoginPage = () => {
             </Link>
           </p>
           
-          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-500 dark:text-gray-400">
-            <p>Demo credentials:</p>
-            <p className="mt-1">Email: demo@example.com | Password: password123</p>
-          </div>
+          
         </div>
       </div>
     </div>

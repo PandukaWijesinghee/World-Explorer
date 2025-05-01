@@ -28,7 +28,7 @@ This React application provides an interactive UI for browsing country data fetc
 ## Installation
 
 1. Clone the repository:
-   git clone https://github.com/<your-username>/countries-app-frontend.git
+   git clone https://github.com/pandukawijesinghee/countries-app-frontend.git
    cd countries-app-frontend
 
 2. Install dependencies:
@@ -58,8 +58,5 @@ To generate coverage reports:
 npm test -- --coverage
 
 
-
 ---
-
-_For full details, see inline code comments and test files in the repository._
 
