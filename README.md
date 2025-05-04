@@ -1,62 +1,118 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/mNaxAqQD)
-# Countries App Frontend
+# React TypeScript Vite Project
 
-## Overview
+A modern web application built with React, TypeScript, and Vite, featuring Firebase authentication and a beautiful UI powered by Tailwind CSS.
 
-This React application provides an interactive UI for browsing country data fetched from the [REST Countries API](https://restcountries.com). Users can search for countries by name, filter by region or language, and view detailed information on each country.
+##  Features
 
-## Table of Contents
+-  Built with Vite for fast development and optimized production builds
+-  Firebase Authentication integration
+-  Modern UI with Tailwind CSS
+-  Responsive design
+-  Testing with Cypress
+-  ESLint for code quality
+-  TypeScript for type safety
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Running the App](#running-the-app)
-- [Building for Production](#building-for-production)
-- [Testing](#testing)
-- [Project Structure](#project-structure)
-- [API Integration](#api-integration)
-- [Authentication and Session Management](#authentication-and-session-management)
-- [Styling](#styling)
-- [Deployment](#deployment)
-- [Challenges and Resolutions](#challenges-and-resolutions)
+##  Prerequisites
 
-## Prerequisites
+Before you begin, ensure you have the following installed:
+- Node.js (v18 or higher recommended)
+- npm (v9 or higher recommended)
 
-- Node.js (v14 or above)
-- npm (v6 or above)
-- Git (for version control)
-
-## Installation
+##  Installation
 
 1. Clone the repository:
-   git clone https://github.com/pandukawijesinghee/countries-app-frontend.git
-   cd countries-app-frontend
+```bash
+git clone [your-repository-url]
+cd [your-project-name]
+```
 
 2. Install dependencies:
-   npm install
+```bash
+cd frontend
+npm install
+```
 
+##  Configuration
 
-## Running the App
+1. Create a `.env` file in the `frontend` directory with your Firebase configuration:
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
 
-Start the development server:
-npm start
+##  Development
 
-This will open the app at `http://localhost:4000`.
+To start the development server:
 
-## Building for Production
+```bash
+cd frontend
+npm run dev
+```
 
-Generate an optimized production build:
+The application will be available at `http://localhost:5173`
+
+##  Building for Production
+
+To create a production build:
+
+```bash
+cd frontend
 npm run build
+```
 
+The build output will be in the `frontend/dist` directory.
 
-The build output is in the `build/` directory, ready to be deployed.
+##  Testing
 
-## Testing
-Run all unit and integration tests with:
-npm test
+Run Cypress tests:
 
-To generate coverage reports:
-npm test -- --coverage
+```bash
+cd frontend
+npm run cypress
+```
 
+##  Available Scripts
 
----
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run cypress` - Run Cypress tests
 
+##  Tech Stack
+
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Firebase
+- React Router
+- Cypress
+- ESLint
+
+##  Project Structure
+
+```
+frontend/
+├── src/            # Source files
+├── public/         # Static assets
+├── cypress/        # Test files
+├── dist/           # Production build
+└── node_modules/   # Dependencies
+```
+
+##  Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+##  License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
