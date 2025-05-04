@@ -12,8 +12,8 @@ import {
   User as FirebaseUser
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, enableIndexedDbPersistence } from 'firebase/firestore';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCG3ZUoZb11Mq5vkHh6An8NkRNFFr9b3Og",
   authDomain: "world-explorer-d6405.firebaseapp.com",
@@ -27,6 +27,17 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Enable offline persistence
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code === 'failed-precondition') {
+    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+  } else if (err.code === 'unimplemented') {
+    console.log('The current browser does not support persistence.');
+  }
+});
+
 const googleProvider = new GoogleAuthProvider();
 
 interface AuthContextType {
@@ -64,21 +75,39 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setCurrentUser({
-          id: user.uid,
-          email: user.email || '',
-          name: user.displayName || '',
-          favoriteCountries: []
-        });
-        setIsAuthenticated(true);
+        try {
+          // Get user's favorites from Firestore
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          const userData = userDoc.data();
+          
+          setCurrentUser({
+            id: user.uid,
+            email: user.email || '',
+            name: user.displayName || '',
+            favoriteCountries: userData?.favoriteCountries || []
+          });
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error('Error loading user data:', error);
+          // Initialize with empty favorites if there's an error
+          setCurrentUser({
+            id: user.uid,
+            email: user.email || '',
+            name: user.displayName || '',
+            favoriteCountries: []
+          });
+          setIsAuthenticated(true);
+        }
       } else {
         setCurrentUser(null);
         setIsAuthenticated(false);
       }
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -119,23 +148,45 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const addFavoriteCountry = (countryCode: string) => {
+  const addFavoriteCountry = async (countryCode: string) => {
     if (currentUser) {
-      const updatedUser = {
-        ...currentUser,
-        favoriteCountries: [...currentUser.favoriteCountries, countryCode]
-      };
-      setCurrentUser(updatedUser);
+      try {
+        const updatedUser = {
+          ...currentUser,
+          favoriteCountries: [...currentUser.favoriteCountries, countryCode]
+        };
+        setCurrentUser(updatedUser);
+        
+        // Update favorites in Firestore
+        await setDoc(doc(db, 'users', currentUser.id), {
+          favoriteCountries: updatedUser.favoriteCountries
+        }, { merge: true });
+      } catch (error) {
+        console.error('Error adding favorite:', error);
+        // Revert the local state if Firestore update fails
+        setCurrentUser(currentUser);
+      }
     }
   };
 
-  const removeFavoriteCountry = (countryCode: string) => {
+  const removeFavoriteCountry = async (countryCode: string) => {
     if (currentUser) {
-      const updatedUser = {
-        ...currentUser,
-        favoriteCountries: currentUser.favoriteCountries.filter(code => code !== countryCode)
-      };
-      setCurrentUser(updatedUser);
+      try {
+        const updatedUser = {
+          ...currentUser,
+          favoriteCountries: currentUser.favoriteCountries.filter(code => code !== countryCode)
+        };
+        setCurrentUser(updatedUser);
+        
+        // Update favorites in Firestore
+        await setDoc(doc(db, 'users', currentUser.id), {
+          favoriteCountries: updatedUser.favoriteCountries
+        }, { merge: true });
+      } catch (error) {
+        console.error('Error removing favorite:', error);
+        // Revert the local state if Firestore update fails
+        setCurrentUser(currentUser);
+      }
     }
   };
 

@@ -20,6 +20,11 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <header className="bg-white dark:bg-gray-800 shadow-md">
       <div className="container mx-auto px-4 py-4">
@@ -56,6 +61,24 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
             </form>
             
             <div className="flex items-center gap-3">
+              {!isAuthenticated && (
+                <Link 
+                  to="/login" 
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors"
+                >
+                  <SimpleIcon name="star" className="w-4 h-4" />
+                  <span className="hidden md:inline">Add your Favorites Here</span>
+                </Link>
+              )}
+              {isAuthenticated && (
+                <Link 
+                  to="/favorites" 
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                >
+                  <SimpleIcon name="star" className="w-4 h-4" />
+                  <span className="hidden md:inline">Favorites</span>
+                </Link>
+              )}
               <button 
                 onClick={toggleDarkMode}
                 className="hidden md:flex p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
@@ -78,11 +101,12 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
                     <span className="hidden md:inline">{currentUser?.name}</span>
                   </Link>
                   <button 
-                    onClick={logout}
-                    className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400"
+                    onClick={handleLogout}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                     aria-label="Log out"
                   >
                     <SimpleIcon name="logOut" className="w-4 h-4" />
+                    <span className="hidden md:inline">Logout</span>
                   </button>
                 </div>
               ) : (
