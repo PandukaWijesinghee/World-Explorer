@@ -12,7 +12,7 @@ import {
   User as FirebaseUser
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getDatabase, ref, set, get, update, remove } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCG3ZUoZb11Mq5vkHh6An8NkRNFFr9b3Og",
@@ -21,23 +21,14 @@ const firebaseConfig = {
   storageBucket: "world-explorer-d6405.firebasestorage.app",
   messagingSenderId: "639024035972",
   appId: "1:639024035972:web:65512de08225ce4f4faad1",
-  measurementId: "G-B8MK84FQVR"
+  measurementId: "G-B8MK84FQVR",
+  databaseURL: "https://world-explorer-d6405-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Enable offline persistence
-enableIndexedDbPersistence(db).catch((err) => {
-  if (err.code === 'failed-precondition') {
-    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
-  } else if (err.code === 'unimplemented') {
-    console.log('The current browser does not support persistence.');
-  }
-});
-
+const database = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 
 interface AuthContextType {
@@ -47,9 +38,11 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
   register: (email: string, name: string, password: string) => Promise<void>;
-  addFavoriteCountry: (countryCode: string) => void;
-  removeFavoriteCountry: (countryCode: string) => void;
+  addFavoriteCountry: (countryCode: string) => Promise<void>;
+  removeFavoriteCountry: (countryCode: string) => Promise<void>;
   isCountryFavorited: (countryCode: string) => boolean;
+  saveUserData: (data: any) => Promise<void>;
+  getUserData: () => Promise<any>;
 }
 
 // Create a context with a default value
@@ -60,9 +53,11 @@ const AuthContext = createContext<AuthContextType>({
   loginWithGoogle: async () => {},
   logout: () => {},
   register: async () => {},
-  addFavoriteCountry: () => {},
-  removeFavoriteCountry: () => {},
+  addFavoriteCountry: async () => {},
+  removeFavoriteCountry: async () => {},
   isCountryFavorited: () => false,
+  saveUserData: async () => {},
+  getUserData: async () => null,
 });
 
 // Custom hook to use the auth context
@@ -81,9 +76,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          // Get user's favorites from Firestore
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          const userData = userDoc.data();
+          // Get user's data from Realtime Database
+          const userRef = ref(database, `users/${user.uid}`);
+          const snapshot = await get(userRef);
+          const userData = snapshot.val();
           
           setCurrentUser({
             id: user.uid,
@@ -94,7 +90,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setIsAuthenticated(true);
         } catch (error) {
           console.error('Error loading user data:', error);
-          // Initialize with empty favorites if there's an error
           setCurrentUser({
             id: user.uid,
             email: user.email || '',
@@ -148,6 +143,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const saveUserData = async (data: any) => {
+    if (currentUser) {
+      try {
+        const userRef = ref(database, `users/${currentUser.id}`);
+        await set(userRef, data);
+      } catch (error) {
+        console.error('Error saving user data:', error);
+        throw error;
+      }
+    }
+  };
+
+  const getUserData = async () => {
+    if (currentUser) {
+      try {
+        const userRef = ref(database, `users/${currentUser.id}`);
+        const snapshot = await get(userRef);
+        return snapshot.val();
+      } catch (error) {
+        console.error('Error getting user data:', error);
+        throw error;
+      }
+    }
+    return null;
+  };
+
   const addFavoriteCountry = async (countryCode: string) => {
     if (currentUser) {
       try {
@@ -157,13 +178,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         };
         setCurrentUser(updatedUser);
         
-        // Update favorites in Firestore
-        await setDoc(doc(db, 'users', currentUser.id), {
-          favoriteCountries: updatedUser.favoriteCountries
-        }, { merge: true });
+        // Update favorites in Realtime Database
+        const userRef = ref(database, `users/${currentUser.id}/favoriteCountries`);
+        await set(userRef, updatedUser.favoriteCountries);
       } catch (error) {
         console.error('Error adding favorite:', error);
-        // Revert the local state if Firestore update fails
         setCurrentUser(currentUser);
       }
     }
@@ -178,13 +197,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         };
         setCurrentUser(updatedUser);
         
-        // Update favorites in Firestore
-        await setDoc(doc(db, 'users', currentUser.id), {
-          favoriteCountries: updatedUser.favoriteCountries
-        }, { merge: true });
+        // Update favorites in Realtime Database
+        const userRef = ref(database, `users/${currentUser.id}/favoriteCountries`);
+        await set(userRef, updatedUser.favoriteCountries);
       } catch (error) {
         console.error('Error removing favorite:', error);
-        // Revert the local state if Firestore update fails
         setCurrentUser(currentUser);
       }
     }
@@ -203,7 +220,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     register,
     addFavoriteCountry,
     removeFavoriteCountry,
-    isCountryFavorited
+    isCountryFavorited,
+    saveUserData,
+    getUserData
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -163,23 +163,31 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+    <div className="container mx-auto px-4 py-8 animate-fadeIn">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
         <div className="flex items-center gap-4 w-full md:w-auto">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
             {filteredCountries.length} {filteredCountries.length === 1 ? 'Country' : 'Countries'} Found
           </h2>
           
           <div className="flex gap-2">
             <button 
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                viewMode === 'grid' 
+                  ? 'bg-primary-500 text-white shadow-glow' 
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
             >
               <Grid size={20} />
             </button>
             <button 
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md ${viewMode === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                viewMode === 'list' 
+                  ? 'bg-primary-500 text-white shadow-glow' 
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
             >
               <List size={20} />
             </button>
@@ -192,12 +200,12 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
             placeholder="Search countries..."
             value={filters.search}
             onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+            className="input-field flex-1"
           />
           
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+            className="btn-secondary flex items-center gap-2"
           >
             <Filter size={18} />
             <span>Filters</span>
@@ -205,21 +213,21 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-          <div className="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-            <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">Total Countries</h3>
-            <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{filteredCountries.length}</p>
+      <div className="card p-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/30 dark:to-primary-800/30 rounded-xl">
+            <h3 className="text-lg font-semibold text-primary-600 dark:text-primary-400">Total Countries</h3>
+            <p className="text-3xl font-bold text-primary-700 dark:text-primary-300">{filteredCountries.length}</p>
           </div>
-          <div className="p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
-            <h3 className="text-lg font-semibold text-green-600 dark:text-green-400">Total Population</h3>
-            <p className="text-2xl font-bold text-green-700 dark:text-green-300">
+          <div className="p-6 bg-gradient-to-br from-secondary-50 to-secondary-100 dark:from-secondary-900/30 dark:to-secondary-800/30 rounded-xl">
+            <h3 className="text-lg font-semibold text-secondary-600 dark:text-secondary-400">Total Population</h3>
+            <p className="text-3xl font-bold text-secondary-700 dark:text-secondary-300">
               {new Intl.NumberFormat().format(totalPopulation)}
             </p>
           </div>
-          <div className="p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
-            <h3 className="text-lg font-semibold text-purple-600 dark:text-purple-400">Average Area</h3>
-            <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+          <div className="p-6 bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-900/30 dark:to-accent-800/30 rounded-xl">
+            <h3 className="text-lg font-semibold text-accent-600 dark:text-accent-400">Average Area</h3>
+            <p className="text-3xl font-bold text-accent-700 dark:text-accent-300">
               {new Intl.NumberFormat().format(Math.round(averageArea))} km²
             </p>
           </div>
@@ -227,7 +235,7 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
       </div>
       
       {showFilters && (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-6 animate-fadeIn">
+        <div className="card p-6 mb-8 animate-slide-down">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Filter Countries</h3>
             <button 
@@ -300,12 +308,12 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
         </div>
       )}
 
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+      <div className="card p-6 mb-8">
         <div className="flex gap-4">
           <button
             onClick={() => toggleSort('name')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-              sortField === 'name' ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+            className={`btn-primary flex items-center gap-2 ${
+              sortField === 'name' ? 'bg-primary-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           >
             Name
@@ -313,8 +321,8 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
           </button>
           <button
             onClick={() => toggleSort('population')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-              sortField === 'population' ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+            className={`btn-primary flex items-center gap-2 ${
+              sortField === 'population' ? 'bg-primary-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           >
             Population
@@ -322,8 +330,8 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
           </button>
           <button
             onClick={() => toggleSort('area')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-              sortField === 'area' ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+            className={`btn-primary flex items-center gap-2 ${
+              sortField === 'area' ? 'bg-primary-500' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           >
             Area
@@ -335,15 +343,16 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
       <div className={`
         ${viewMode === 'grid' 
           ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6' 
-          : 'flex flex-col gap-4'
+          : 'flex flex-col gap-6'
         }
       `}>
-        {filteredCountries.map(country => (
-          <CountryCard 
-            key={country.cca3} 
-            country={country}
-            viewMode={viewMode}
-          />
+        {filteredCountries.map((country, index) => (
+          <div key={country.cca3} className="animate-slide-up" style={{ animationDelay: `${index * 0.05}s` }}>
+            <CountryCard 
+              country={country}
+              viewMode={viewMode}
+            />
+          </div>
         ))}
       </div>
     </div>
