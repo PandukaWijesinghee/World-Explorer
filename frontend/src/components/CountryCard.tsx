@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, MapPin, Users, Globe2, ArrowRight, Star } from 'lucide-react';
 import { Country } from '../types/Country';
 import { useAuth } from '../context/AuthContext';
 
@@ -39,41 +39,51 @@ const CountryCard = ({ country, viewMode }: CountryCardProps) => {
             alt={country.flags.alt || `Flag of ${country.name.common}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
-        </div>
-        
-        <div className="flex-grow p-6 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent mb-2">
-              {country.name.common}
-            </h2>
-            <div className="flex gap-8 text-gray-600 dark:text-gray-300">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-primary-600 dark:text-primary-400">Population:</span>
-                <span>{formatPopulation(country.population)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-secondary-600 dark:text-secondary-400">Region:</span>
-                <span>{country.region}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-accent-600 dark:text-accent-400">Capital:</span>
-                <span>{country.capital?.join(', ') || 'N/A'}</span>
-              </div>
-            </div>
-          </div>
-          
           {isAuthenticated && (
             <button 
               onClick={handleFavoriteToggle}
-              className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 ml-4 transition-all duration-200 hover:scale-110"
+              className="absolute top-2 right-2 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 transition-all duration-200 hover:scale-110"
               aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
             >
               <Heart 
-                size={20} 
+                size={16} 
                 className={`${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-500 dark:text-gray-400'} transition-colors duration-200`} 
               />
             </button>
           )}
+        </div>
+        
+        <div className="flex-grow p-6 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                {country.name.common}
+              </h2>
+              {isFavorited && (
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+              )}
+            </div>
+            
+            <div className="grid grid-cols-3 gap-4 text-gray-600 dark:text-gray-300">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary-500" />
+                <span className="text-sm">{formatPopulation(country.population)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Globe2 className="w-4 h-4 text-secondary-500" />
+                <span className="text-sm">{country.region}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-accent-500" />
+                <span className="text-sm">{country.capital?.join(', ') || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400">View Details</span>
+            <ArrowRight className="w-4 h-4 text-primary-500 transition-transform duration-200 group-hover:translate-x-1" />
+          </div>
         </div>
       </Link>
     );
@@ -93,7 +103,7 @@ const CountryCard = ({ country, viewMode }: CountryCardProps) => {
         {isAuthenticated && (
           <button 
             onClick={handleFavoriteToggle}
-            className="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 transition-all duration-200 hover:scale-110"
+            className="absolute top-3 right-3 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 transition-all duration-200 hover:scale-110"
             aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart 
@@ -105,29 +115,36 @@ const CountryCard = ({ country, viewMode }: CountryCardProps) => {
       </div>
       
       <div className="p-6 flex flex-col flex-grow">
-        <h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent mb-3 line-clamp-1">
-          {country.name.common}
-        </h2>
-        
-        <div className="flex flex-col gap-3 text-gray-600 dark:text-gray-300 text-sm flex-grow">
-          <p className="flex items-center gap-2">
-            <span className="font-semibold text-primary-600 dark:text-primary-400">Population:</span>
-            <span>{formatPopulation(country.population)}</span>
-          </p>
-          <p className="flex items-center gap-2">
-            <span className="font-semibold text-secondary-600 dark:text-secondary-400">Region:</span>
-            <span>{country.region}</span>
-          </p>
-          <p className="flex items-center gap-2">
-            <span className="font-semibold text-accent-600 dark:text-accent-400">Capital:</span>
-            <span>{country.capital?.join(', ') || 'N/A'}</span>
-          </p>
+        <div className="flex items-center gap-2 mb-3">
+          <h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent line-clamp-1">
+            {country.name.common}
+          </h2>
+          {isFavorited && (
+            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+          )}
         </div>
         
-        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <span className="inline-block px-4 py-2 bg-gradient-to-r from-primary-500 to-accent-500 text-white text-sm font-medium rounded-lg transition-all duration-200 group-hover:shadow-glow">
-            View Details
-          </span>
+        <div className="flex flex-col gap-3 text-gray-600 dark:text-gray-300 text-sm flex-grow">
+          <div className="flex items-center gap-2">
+            <Users className="w-4 h-4 text-primary-500" />
+            <span className="font-medium text-primary-600 dark:text-primary-400">Population:</span>
+            <span>{formatPopulation(country.population)}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Globe2 className="w-4 h-4 text-secondary-500" />
+            <span className="font-medium text-secondary-600 dark:text-secondary-400">Region:</span>
+            <span>{country.region}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-accent-500" />
+            <span className="font-medium text-accent-600 dark:text-accent-400">Capital:</span>
+            <span>{country.capital?.join(', ') || 'N/A'}</span>
+          </div>
+        </div>
+        
+        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+          <span className="text-sm text-gray-500 dark:text-gray-400">View Details</span>
+          <ArrowRight className="w-4 h-4 text-primary-500 transition-transform duration-200 group-hover:translate-x-1" />
         </div>
       </div>
     </Link>

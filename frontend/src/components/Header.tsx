@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SimpleIcon from './SimpleIcon';
 import { useAuth } from '../context/AuthContext';
+import { Globe } from 'lucide-react';
 
 interface HeaderProps {
   toggleDarkMode: () => void;
@@ -24,6 +25,8 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
     logout();
     navigate('/');
   };
+//<SimpleIcon name="globe" className="w-6 h-6" />
+//<span className="text-xl font-bold">World Explorer</span>
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-md">
@@ -31,8 +34,12 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2 text-gray-800 dark:text-white">
-              <SimpleIcon name="globe" className="w-6 h-6" />
-              <span className="text-xl font-bold">World Explorer</span>
+            <div className="flex items-center gap-2">
+               <Globe className="w-8 h-8 text-primary-500" />
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                World Explorer
+             </h1> 
+            </div>
             </Link>
             
             <button 
