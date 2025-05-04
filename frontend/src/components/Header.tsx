@@ -56,37 +56,7 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
           </div>
           
           <div className="flex items-center justify-between gap-4 w-full md:w-auto">
-            <form onSubmit={handleSearch} className="relative flex-grow md:w-64">
-              <input
-                type="text"
-                placeholder="Search for a country..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full py-2 pl-10 pr-4 rounded-md bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 dark:text-gray-200"
-              />
-              <SimpleIcon name="search" className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-            </form>
-            
-            <div className="flex items-center gap-3">
-              {!isAuthenticated && (
-                <Link 
-                  to="/login" 
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors"
-                >
-                  <SimpleIcon name="star" className="w-4 h-4" />
-                  <span className="hidden md:inline">Add your Favorites Here</span>
-                </Link>
-              )}
-              {isAuthenticated && (
-                <Link 
-                  to="/favorites" 
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
-                >
-                  <SimpleIcon name="star" className="w-4 h-4" />
-                  <span className="hidden md:inline">Favorites</span>
-                </Link>
-              )}
-              <button 
+          <button 
                 onClick={toggleDarkMode}
                 className="hidden md:flex p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
                 aria-label="Toggle dark mode"
@@ -97,6 +67,46 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
                   <span className="text-2xl">🌙</span>
                 )}
               </button>
+           {/*  <form onSubmit={handleSearch} className="relative flex-grow md:w-64">
+              <input
+                type="text"
+                placeholder="Search for a country..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full py-2 pl-10 pr-4 rounded-md bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 dark:text-gray-200"
+              />
+              <SimpleIcon name="search" className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+            </form> */}
+            {/*  {isAuthenticated && (
+                <Link 
+                  to="/favorites" 
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                >
+                  <SimpleIcon name="star" className="w-4 h-4" />
+                  <span className="hidden md:inline">Favorites</span>
+                </Link>
+              )}
+              */}
+            <div className="flex items-center gap-3">
+              {!isAuthenticated && (
+                <Link 
+                  to="/login" 
+                  className=" px-4 py-1 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+                >
+                  
+                  <span className="hidden md:inline">Add your Favorites Here</span>
+                </Link>
+              )}
+              {isAuthenticated && (
+                <Link 
+                  to="/favorites" 
+                  className="px-4 py-1 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+                >
+               
+                  <span className="hidden md:inline">Favorites</span>
+                </Link>
+              )}
+            
               
               {isAuthenticated ? (
                 <div className="flex items-center gap-2">
@@ -112,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ toggleDarkMode, isDarkMode }) => {
                     className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                     aria-label="Log out"
                   >
-                    <SimpleIcon name="logOut" className="w-4 h-4" />
+                    
                     <span className="hidden md:inline">Logout</span>
                   </button>
                 </div>
