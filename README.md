@@ -84,7 +84,7 @@ npm run cypress
 - `npm run lint` - Run ESLint
 - `npm run cypress` - Run Cypress tests
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
 - React 18
 - TypeScript
