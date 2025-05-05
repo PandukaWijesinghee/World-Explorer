@@ -171,7 +171,7 @@ cd frontend
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
+The application will be available at `http://localhost:4002`
 
 ##  Building for Production
 
