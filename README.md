@@ -3,23 +3,23 @@
 
 A modern web application built with React, TypeScript, and Vite, featuring Firebase authentication and a beautiful UI powered by Tailwind CSS.
 
-## 🚀 Features
+##  Features
 
-- ⚡️ Built with Vite for fast development and optimized production builds
-- 🔥 Firebase Authentication integration
-- 🎨 Modern UI with Tailwind CSS
-- 📱 Responsive design
-- 🧪 Testing with Cypress
-- 🔍 ESLint for code quality
-- 📦 TypeScript for type safety
+-  Built with Vite for fast development and optimized production builds
+-  Firebase Authentication integration
+-  Modern UI with Tailwind CSS
+-  Responsive design
+-  Testing with Cypress
+-  ESLint for code quality
+-  TypeScript for type safety
 
-## 📋 Prerequisites
+##  Prerequisites
 
 Before you begin, ensure you have the following installed:
 - Node.js (v18 or higher recommended)
 - npm (v9 or higher recommended)
 
-## 🛠️ Installation
+##  Installation
 
 1. Clone the repository:
 ```bash
@@ -33,7 +33,7 @@ cd frontend
 npm install
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 1. Create a `.env` file in the `frontend` directory with your Firebase configuration:
 ```env
@@ -45,7 +45,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-## 🚀 Development
+##  Development
 
 To start the development server:
 
@@ -56,7 +56,7 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
-## 🏗️ Building for Production
+## 🏗 Building for Production
 
 To create a production build:
 
@@ -67,7 +67,7 @@ npm run build
 
 The build output will be in the `frontend/dist` directory.
 
-## 🧪 Testing
+##  Testing
 
 Run Cypress tests:
 
@@ -76,7 +76,7 @@ cd frontend
 npm run cypress
 ```
 
-## 📦 Available Scripts
+##  Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -95,7 +95,7 @@ npm run cypress
 - Cypress
 - ESLint
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 frontend/
@@ -106,7 +106,7 @@ frontend/
 └── node_modules/   # Dependencies
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -114,7 +114,7 @@ frontend/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
+##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
