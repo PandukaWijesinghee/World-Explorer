@@ -1,6 +1,9 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/mNaxAqQD)
 # React TypeScript Vite Project
 
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/mNaxAqQD)
+# React TypeScript Vite Project
+
 A modern web application built with React, TypeScript, and Vite, featuring Firebase authentication and a beautiful UI powered by Tailwind CSS.
 
 ##  Features
@@ -56,7 +59,7 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
-## 🏗 Building for Production
+##  Building for Production
 
 To create a production build:
 
@@ -84,7 +87,7 @@ npm run cypress
 - `npm run lint` - Run ESLint
 - `npm run cypress` - Run Cypress tests
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 - React 18
 - TypeScript
@@ -115,6 +118,10 @@ frontend/
 5. Open a Pull Request
 
 ##  License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
 
 This project is licensed under the MIT License  Copyright (c) 2025 PANDUKAWIJESINGHE
 
