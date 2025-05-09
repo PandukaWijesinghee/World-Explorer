@@ -1,23 +1,8 @@
 import axios from 'axios';
 import { Country } from '../types/Country';
-import { fallbackCountries } from './fallbackData';
+import fallbackCountries from './fallbackData';
 
-const API_BASE_URL = 'https://restcountries.com/v3.1';
-
-// Helper function to validate country data
-const isValidCountry = (data: any): data is Country => {
-  return (
-    Array.isArray(data) &&
-    data.length > 0 &&
-    data.every(country => 
-      country &&
-      typeof country === 'object' &&
-      'name' in country &&
-      'cca3' in country &&
-      'population' in country
-    )
-  );
-};
+const API_BASE_URL = '/api';
 
 // Get all countries with essential fields
 export const getAllCountries = async (): Promise<Country[]> => {
@@ -29,14 +14,8 @@ export const getAllCountries = async (): Promise<Country[]> => {
       },
       timeout: 10000 // 10 second timeout
     });
-    
-    if (isValidCountry(response.data)) {
-      console.log('Countries fetched successfully:', response.data.length);
-      return response.data;
-    } else {
-      console.error('Invalid response data format');
-      return fallbackCountries;
-    }
+    console.log('Countries fetched successfully:', response.data.length);
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('API Error:', {
@@ -48,6 +27,7 @@ export const getAllCountries = async (): Promise<Country[]> => {
     } else {
       console.error('Error fetching all countries:', error);
     }
+    // Return fallback data instead of empty array
     console.log('Using fallback countries data');
     return fallbackCountries;
   }
@@ -57,12 +37,14 @@ export const getAllCountries = async (): Promise<Country[]> => {
 export const searchCountriesByName = async (name: string): Promise<Country[]> => {
   try {
     const response = await axios.get<Country[]>(`${API_BASE_URL}/name/${name}`);
-    return isValidCountry(response.data) ? response.data : [];
+    return response.data;
   } catch (error) {
+    // If no countries found, return empty array instead of throwing error
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       return [];
     }
     console.error('Error searching countries by name:', error);
+    // Use fallback data and filter it
     return fallbackCountries.filter(country => 
       country.name.common.toLowerCase().includes(name.toLowerCase()) ||
       country.name.official.toLowerCase().includes(name.toLowerCase())
@@ -74,9 +56,10 @@ export const searchCountriesByName = async (name: string): Promise<Country[]> =>
 export const getCountriesByRegion = async (region: string): Promise<Country[]> => {
   try {
     const response = await axios.get<Country[]>(`${API_BASE_URL}/region/${region}`);
-    return isValidCountry(response.data) ? response.data : [];
+    return response.data;
   } catch (error) {
     console.error('Error fetching countries by region:', error);
+    // Use fallback data and filter it
     return fallbackCountries.filter(country => 
       country.region.toLowerCase() === region.toLowerCase()
     );
@@ -87,12 +70,10 @@ export const getCountriesByRegion = async (region: string): Promise<Country[]> =
 export const getCountryByCode = async (code: string): Promise<Country> => {
   try {
     const response = await axios.get<Country[]>(`${API_BASE_URL}/alpha/${code}`);
-    if (isValidCountry(response.data) && response.data.length > 0) {
-      return response.data[0];
-    }
-    throw new Error('Invalid country data received');
+    return response.data[0];
   } catch (error) {
     console.error(`Error fetching country with code ${code}:`, error);
+    // Use fallback data and find the country
     const country = fallbackCountries.find(c => 
       c.cca2 === code || c.cca3 === code || c.cioc === code
     );
@@ -110,9 +91,10 @@ export const getCountriesByCodes = async (codes: string[]): Promise<Country[]> =
   try {
     const codesParam = codes.join(',');
     const response = await axios.get<Country[]>(`${API_BASE_URL}/alpha?codes=${codesParam}`);
-    return isValidCountry(response.data) ? response.data : [];
+    return response.data;
   } catch (error) {
     console.error('Error fetching countries by codes:', error);
+    // Use fallback data and filter it
     return fallbackCountries.filter(country => 
       codes.includes(country.cca2) || codes.includes(country.cca3) || codes.includes(country.cioc)
     );
