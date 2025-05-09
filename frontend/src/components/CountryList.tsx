@@ -13,8 +13,8 @@ type SortField = 'name' | 'population' | 'area';
 type SortOrder = 'asc' | 'desc';
 type ViewMode = 'grid' | 'list';
 
-const CountryList = ({ countries = [], isLoading, error }: CountryListProps) => {
-  const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
+const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>(countries);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortField, setSortField] = useState<SortField>('name');
@@ -26,13 +26,39 @@ const CountryList = ({ countries = [], isLoading, error }: CountryListProps) => 
     search: ''
   });
 
+  // Extract unique regions and languages
+  const regions = [...new Set(countries.map(country => country.region))].sort();
+  const allLanguages = countries.reduce((acc, country) => {
+    const langs = country.languages ? Object.values(country.languages) : [];
+    return [...acc, ...langs];
+  }, [] as string[]);
+  const languages = [...new Set(allLanguages)].sort();
+
+  // Calculate statistics
+  const totalPopulation = filteredCountries.reduce((sum, country) => sum + country.population, 0);
+  const averageArea = filteredCountries.length > 0 
+    ? filteredCountries.reduce((sum, country) => sum + country.area, 0) / filteredCountries.length 
+    : 0;
+
+  // Sort function
+  const sortCountries = (a: Country, b: Country) => {
+    let comparison = 0;
+    switch (sortField) {
+      case 'name':
+        comparison = a.name.common.localeCompare(b.name.common);
+        break;
+      case 'population':
+        comparison = a.population - b.population;
+        break;
+      case 'area':
+        comparison = a.area - b.area;
+        break;
+    }
+    return sortOrder === 'asc' ? comparison : -comparison;
+  };
+
   // Update filtered countries when source data or filters change
   useEffect(() => {
-    if (!Array.isArray(countries)) {
-      setFilteredCountries([]);
-      return;
-    }
-
     let result = [...countries];
     
     // Apply search filter
@@ -80,46 +106,6 @@ const CountryList = ({ countries = [], isLoading, error }: CountryListProps) => 
     
     setFilteredCountries(result);
   }, [countries, filters, sortField, sortOrder]);
-
-  // Extract unique regions and languages
-  const regions = Array.isArray(countries) 
-    ? [...new Set(countries.map(country => country.region))].sort()
-    : [];
-
-  const allLanguages = Array.isArray(countries)
-    ? countries.reduce((acc, country) => {
-        const langs = country.languages ? Object.values(country.languages) : [];
-        return [...acc, ...langs];
-      }, [] as string[])
-    : [];
-
-  const languages = [...new Set(allLanguages)].sort();
-
-  // Calculate statistics
-  const totalPopulation = Array.isArray(filteredCountries)
-    ? filteredCountries.reduce((sum, country) => sum + country.population, 0)
-    : 0;
-
-  const averageArea = Array.isArray(filteredCountries) && filteredCountries.length > 0
-    ? filteredCountries.reduce((sum, country) => sum + country.area, 0) / filteredCountries.length
-    : 0;
-
-  // Sort function
-  const sortCountries = (a: Country, b: Country) => {
-    let comparison = 0;
-    switch (sortField) {
-      case 'name':
-        comparison = a.name.common.localeCompare(b.name.common);
-        break;
-      case 'population':
-        comparison = a.population - b.population;
-        break;
-      case 'area':
-        comparison = a.area - b.area;
-        break;
-    }
-    return sortOrder === 'asc' ? comparison : -comparison;
-  };
 
   const resetFilters = () => {
     setFilters({
