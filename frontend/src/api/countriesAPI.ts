@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Country } from '../types/Country';
 import fallbackCountries from './fallbackData';
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'https://restcountries.com/v3.1';
 
 // Get all countries with essential fields
 export const getAllCountries = async (): Promise<Country[]> => {
