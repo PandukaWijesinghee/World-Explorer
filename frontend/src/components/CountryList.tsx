@@ -13,8 +13,8 @@ type SortField = 'name' | 'population' | 'area';
 type SortOrder = 'asc' | 'desc';
 type ViewMode = 'grid' | 'list';
 
-const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
-  const [filteredCountries, setFilteredCountries] = useState<Country[]>(countries);
+const CountryList = ({ countries = [], isLoading, error }: CountryListProps) => {
+  const [filteredCountries, setFilteredCountries] = useState<Country[]>(countries || []);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sortField, setSortField] = useState<SortField>('name');
@@ -27,17 +27,17 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
   });
 
   // Extract unique regions and languages
-  const regions = [...new Set(countries.map(country => country.region))].sort();
-  const allLanguages = countries.reduce((acc, country) => {
+  const regions = [...new Set((countries || []).map(country => country.region))].sort();
+  const allLanguages = (countries || []).reduce((acc, country) => {
     const langs = country.languages ? Object.values(country.languages) : [];
     return [...acc, ...langs];
   }, [] as string[]);
   const languages = [...new Set(allLanguages)].sort();
 
   // Calculate statistics
-  const totalPopulation = filteredCountries.reduce((sum, country) => sum + country.population, 0);
-  const averageArea = filteredCountries.length > 0 
-    ? filteredCountries.reduce((sum, country) => sum + country.area, 0) / filteredCountries.length 
+  const totalPopulation = (filteredCountries || []).reduce((sum, country) => sum + country.population, 0);
+  const averageArea = (filteredCountries || []).length > 0 
+    ? (filteredCountries || []).reduce((sum, country) => sum + country.area, 0) / (filteredCountries || []).length 
     : 0;
 
   // Sort function
@@ -59,6 +59,11 @@ const CountryList = ({ countries, isLoading, error }: CountryListProps) => {
 
   // Update filtered countries when source data or filters change
   useEffect(() => {
+    if (!countries) {
+      setFilteredCountries([]);
+      return;
+    }
+
     let result = [...countries];
     
     // Apply search filter
