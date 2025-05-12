@@ -14,8 +14,17 @@ export const getAllCountries = async (): Promise<Country[]> => {
       },
       timeout: 10000 // 10 second timeout
     });
-    console.log('Countries fetched successfully:', response.data.length);
-    return response.data;
+    
+    // Ensure we have an array of countries
+    const countries = Array.isArray(response.data) ? response.data : [];
+    console.log('Countries fetched successfully:', countries.length);
+    
+    if (countries.length === 0) {
+      console.log('No countries returned from API, using fallback data');
+      return fallbackCountries;
+    }
+    
+    return countries;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('API Error:', {
@@ -37,7 +46,7 @@ export const getAllCountries = async (): Promise<Country[]> => {
 export const searchCountriesByName = async (name: string): Promise<Country[]> => {
   try {
     const response = await axios.get<Country[]>(`${API_BASE_URL}/name/${name}`);
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     // If no countries found, return empty array instead of throwing error
     if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -56,7 +65,7 @@ export const searchCountriesByName = async (name: string): Promise<Country[]> =>
 export const getCountriesByRegion = async (region: string): Promise<Country[]> => {
   try {
     const response = await axios.get<Country[]>(`${API_BASE_URL}/region/${region}`);
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching countries by region:', error);
     // Use fallback data and filter it
@@ -70,7 +79,11 @@ export const getCountriesByRegion = async (region: string): Promise<Country[]> =
 export const getCountryByCode = async (code: string): Promise<Country> => {
   try {
     const response = await axios.get<Country[]>(`${API_BASE_URL}/alpha/${code}`);
-    return response.data[0];
+    const countries = Array.isArray(response.data) ? response.data : [];
+    if (countries.length === 0) {
+      throw new Error(`Country with code ${code} not found`);
+    }
+    return countries[0];
   } catch (error) {
     console.error(`Error fetching country with code ${code}:`, error);
     // Use fallback data and find the country
@@ -91,7 +104,7 @@ export const getCountriesByCodes = async (codes: string[]): Promise<Country[]> =
   try {
     const codesParam = codes.join(',');
     const response = await axios.get<Country[]>(`${API_BASE_URL}/alpha?codes=${codesParam}`);
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error('Error fetching countries by codes:', error);
     // Use fallback data and filter it
